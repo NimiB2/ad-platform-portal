@@ -7,8 +7,14 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd }) => {
   const [error, setError] = useState('');
   const currentUser = getCurrentUser();
   const isDeveloper = currentUser === 'developer@example.com';
+  
+  // Add this to recognize returning users
+  const isReturningUser = localStorage.getItem('hasVisitedBefore') === 'true';
 
   useEffect(() => {
+    // Mark user as having visited
+    localStorage.setItem('hasVisitedBefore', 'true');
+    
     fetchAds();
   }, []);
 
@@ -43,6 +49,17 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd }) => {
 
   return (
     <div style={{ padding: '20px' }}>
+      {isReturningUser && (
+        <div style={{ 
+          backgroundColor: '#e3f2fd', 
+          padding: '10px', 
+          borderRadius: '4px',
+          marginBottom: '15px' 
+        }}>
+          Welcome back! Good to see you again.
+        </div>
+      )}
+      
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Dashboard</h2>
         <div>
