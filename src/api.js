@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Change this to your actual API URL
-const API_URL = 'https://ad-server-kappa.vercel.app/';
+const API_URL = '/api/';
 
 // User management
 export const loginUser = (email) => {

@@ -1,0 +1,12 @@
+{
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "https://ad-server-kappa.vercel.app/$1"
+      },
+      { 
+        "src": "/(.*)", 
+        "dest": "/index.html" 
+      }
+    ]
+  }
