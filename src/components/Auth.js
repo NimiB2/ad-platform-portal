@@ -31,8 +31,11 @@ const Auth = ({ onLogin }) => {
           await loginUser(email);
           onLogin(email);
         } catch (err) {
-          // Special handling for example.com domain
-          if (err.response?.data?.error?.includes('example.com')) {
+          if (err.response?.status === 200) {
+            setError('This email is already registered. Please login instead.');
+            setLoading(false);
+            return;
+          }else if (err.response?.data?.error?.includes('example.com')) {
             // If it's just the example.com error, ignore it and proceed anyway
             console.log('Ignoring example.com domain validation for testing');
             try {

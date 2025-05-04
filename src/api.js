@@ -3,18 +3,18 @@ import axios from 'axios';
 // User authentication
 export const loginUser = async (email) => {
   try {
-    // Use the performers endpoint to check if user exists
     const response = await axios.post('/api/performers', { 
-      name: 'Existing User', // Name doesn't matter for lookup
+      name: 'Existing User',
       email: email 
     });
     
-    // If response is 200, user exists
     if (response.status === 200) {
-      // Store user email and ID in local storage
       localStorage.setItem('currentUser', email);
       localStorage.setItem('performerId', response.data.performerId);
       return response.data;
+    } else {
+      // If we somehow get a different success status, throw an error
+      throw new Error('User not found');
     }
   } catch (error) {
     throw error;
