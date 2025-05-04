@@ -4,6 +4,8 @@ import Dashboard from './components/Dashboard';
 import AdForm from './components/AdForm';
 import AdStats from './components/AdStats';
 import { getCurrentUser, logoutUser } from './api';
+import AllAdStats from './components/AllAdStats';
+
 
 function App() {
   // Main state to control which view is displayed
@@ -11,6 +13,10 @@ function App() {
   const [user, setUser] = useState(null);
   const [currentAd, setCurrentAd] = useState(null);
   const [currentAdId, setCurrentAdId] = useState(null);
+
+  const handleViewAllStats = () => {
+    setView('allAdStats');
+  };
 
   // Check if user is already logged in
   useEffect(() => {
@@ -92,6 +98,12 @@ function App() {
         {view === 'adStats' && (
           <AdStats 
             adId={currentAdId} 
+            onBack={() => setView('dashboard')} 
+          />
+        )}
+
+        {view === 'allAdStats' && (
+          <AllAdStats 
             onBack={() => setView('dashboard')} 
           />
         )}

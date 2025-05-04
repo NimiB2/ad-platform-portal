@@ -93,6 +93,56 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd }) => {
       
       {error && <div style={{ color: 'red', marginBottom: '15px' }}>{error}</div>}
       
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <h2>Dashboard</h2>
+      <div>
+        <button
+          onClick={() => onViewAllStats()} // Add this new prop for the Dashboard component
+          style={{
+            backgroundColor: '#FF9800',
+            color: 'white',
+            padding: '10px 15px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginRight: '10px'
+          }}
+        >
+          View All Stats
+        </button>
+        
+        <button
+          onClick={onNewAd}
+          style={{
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            padding: '10px 15px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginRight: '10px'
+          }}
+        >
+          New Ad
+        </button>
+        
+        <button
+          onClick={onLogout}
+          style={{
+            backgroundColor: '#f44336',
+            color: 'white',
+            padding: '10px 15px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+
+
       <h3>Your Ads</h3>
       {ads.length === 0 ? (
         <p>No ads found. Create your first ad!</p>

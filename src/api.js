@@ -109,10 +109,21 @@ export const deleteAd = async (id) => {
   }
 };
 
-// Statistics
+//Ad Statistics
 export const getAdStats = async (id) => {
   try {
     const response = await axios.get(`/api/ads/${id}/stats`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Performer Statistics
+export const getPerformerStats = async () => {
+  try {
+    const performerId = localStorage.getItem('performerId');
+    const response = await axios.get(`/api/performers/${performerId}/stats`);
     return response.data;
   } catch (error) {
     throw error;
