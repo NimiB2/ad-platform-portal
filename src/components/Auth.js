@@ -16,25 +16,25 @@ const Auth = ({ onLogin }) => {
       setLoading(true);
       
       if (isLogin) {
-        // For login, just store the email and proceed
-        // No server validation needed for this educational project
-        loginUser(email);
-        onLogin(email);
-      } else {
+        // For login, validate with server
         try {
-          // Try to register
-          await registerUser(name, email);
-          loginUser(email);
+          await loginUser(email);
           onLogin(email);
         } catch (err) {
-          // If the error is about example.com, bypass it
-          if (err.response?.data?.error?.includes('example.com')) {
-            console.log('Bypassing example.com validation for educational purposes');
-            // Proceed anyway
-            loginUser(email);
-            onLogin(email);
+          // If error is 404 or similar, user doesn't exist
+          setError('User not found. Please check your email or register.');
+        }
+      } else {
+        // Registration
+        try {
+          await registerUser(name, email);
+          await loginUser(email); // Now login after registration
+          onLogin(email);
+        } catch (err) {
+          if (err.response?.status === 200) {
+            // Email already exists
+            setError('This email is already registered. Please login instead.');
           } else {
-            // For other errors, show them
             throw err;
           }
         }

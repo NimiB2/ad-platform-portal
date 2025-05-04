@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { getAds, deleteAd, getCurrentUser } from '../api';
+import { getAds, deleteAd, getCurrentUser, getPerformerId } from '../api';
 
 const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const currentUser = getCurrentUser();
+  const performerId = getPerformerId();
   const isDeveloper = currentUser === 'developer@example.com';
   
   // Add this to recognize returning users
@@ -21,11 +22,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd }) => {
   const fetchAds = async () => {
     try {
       setLoading(true);
-      const allAds = await getAds();
-      // Filter ads for current user if not developer
-      const userAds = allAds.filter(ad => 
-        ad.performerEmail === currentUser || isDeveloper
-      );
+      const userAds = await getAds(); // This now returns only user's ads
       setAds(userAds);
     } catch (err) {
       setError('Failed to load ads');
