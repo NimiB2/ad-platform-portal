@@ -1,5 +1,6 @@
+// src/components/Auth.js
 import React, { useState } from 'react';
-import { loginUser, registerUser } from '../api';
+import { loginUser, registerUser, checkEmailExists } from '../api';
 
 const Auth = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,41 +16,28 @@ const Auth = ({ onLogin }) => {
     try {
       setLoading(true);
       
+      // Check if email exists
+      const emailExists = await checkEmailExists(email);
+      
       if (isLogin) {
-        // For login, validate with server
-        try {
+        // Login flow
+        if (emailExists) {
+          // Email exists, proceed with login
           await loginUser(email);
           onLogin(email);
-        } catch (err) {
-          // If error is 404 or similar, user doesn't exist
+        } else {
+          // Email doesn't exist, show error
           setError('User not found. Please check your email or register.');
         }
       } else {
-        // For registration
-        try {
+        // Registration flow
+        if (emailExists) {
+          // Email exists, prevent registration
+          setError('This email is already registered. Please login instead.');
+        } else {
+          // Email doesn't exist, proceed with registration
           await registerUser(name, email);
-          await loginUser(email);
           onLogin(email);
-        } catch (err) {
-          if (err.response?.status === 200) {
-            setError('This email is already registered. Please login instead.');
-            setLoading(false);
-            return;
-          }else if (err.response?.data?.error?.includes('example.com')) {
-            // If it's just the example.com error, ignore it and proceed anyway
-            console.log('Ignoring example.com domain validation for testing');
-            try {
-              await loginUser(email);
-              onLogin(email);
-            } catch (innerErr) {
-              setError(innerErr.response?.data?.error || 'Login failed after registration');
-            }
-          } else if (err.response?.status === 200) {
-            // Email already exists
-            setError('This email is already registered. Please login instead.');
-          } else {
-            throw err;
-          }
         }
       }
     } catch (err) {
