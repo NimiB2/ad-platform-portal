@@ -84,6 +84,7 @@ function App() {
             onEditAd={handleEditAd} 
             onViewStats={handleViewStats}
             onNewAd={handleNewAd}
+            onViewAllStats={handleViewAllStats}
           />
         )}
         
