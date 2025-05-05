@@ -57,11 +57,14 @@ export const getPerformerId = () => {
 };
 
 // Ad management
-export const getAds = async () => {
+export const getAds = async (getAll = false) => {
   try {
     // Get all ads from the server
     const response = await axios.get('/api/ads');
     const allAds = response.data;
+    
+    // If getAll flag is true, return all ads (for admin)
+    if (getAll) return allAds;
     
     // Get the current user's ID
     const performerId = localStorage.getItem('performerId');
@@ -73,6 +76,7 @@ export const getAds = async () => {
   }
 };
 
+// Get ad by id
 export const getAdById = async (id) => {
   try {
     const response = await axios.get(`/api/ads/${id}`);
@@ -82,6 +86,7 @@ export const getAdById = async (id) => {
   }
 };
 
+//Ad Create Ad
 export const createAd = async (adData) => {
   try {
     const response = await axios.post('/api/ads', adData);
@@ -91,6 +96,7 @@ export const createAd = async (adData) => {
   }
 };
 
+//Ad Update Ad
 export const updateAd = async (id, adData) => {
   try {
     const response = await axios.put(`/api/ads/${id}`, adData);
@@ -100,6 +106,7 @@ export const updateAd = async (id, adData) => {
   }
 };
 
+//Ad Delete Ad
 export const deleteAd = async (id) => {
   try {
     const response = await axios.delete(`/api/ads/${id}`);
@@ -124,6 +131,16 @@ export const getPerformerStats = async () => {
   try {
     const performerId = localStorage.getItem('performerId');
     const response = await axios.get(`/api/performers/${performerId}/stats`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Get all performers (admin only)
+export const getAllPerformers = async () => {
+  try {
+    const response = await axios.get('/api/performers');
     return response.data;
   } catch (error) {
     throw error;

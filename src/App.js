@@ -5,6 +5,7 @@ import AdForm from './components/AdForm';
 import AdStats from './components/AdStats';
 import { getCurrentUser, logoutUser } from './api';
 import AllAdStats from './components/AllAdStats';
+import AdminView from './components/AdminView';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [currentAd, setCurrentAd] = useState(null);
   const [currentAdId, setCurrentAdId] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleViewAllStats = () => {
     setView('allAdStats');
@@ -30,6 +32,8 @@ function App() {
   // Handle login
   const handleLogin = (email) => {
     setUser(email);
+    // Set admin flag if the email indicates a developer
+    setIsAdmin(email === 'developer@example.com');
     setView('dashboard');
   };
 
@@ -87,7 +91,11 @@ function App() {
             onViewAllStats={handleViewAllStats}
           />
         )}
-        
+
+        {view === 'dashboard' && isAdmin && (
+          <AdminView />
+        )}     
+           
         {view === 'adForm' && (
           <AdForm 
             ad={currentAd} 

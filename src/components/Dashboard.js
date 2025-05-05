@@ -105,6 +105,19 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
       </div>
     </div>
 
+      {isDeveloper && (
+        <div style={{ 
+          backgroundColor: '#ffebee', 
+          padding: '10px', 
+          borderRadius: '4px',
+          marginBottom: '15px' 
+        }}>
+          <h3>Developer Options</h3>
+          <p>As a developer, you have access to additional system information.</p>
+          <p>Scroll down to see the Admin View with all performers and ads.</p>
+        </div>
+      )}
+
     {error && <div style={{ color: 'red', marginBottom: '15px' }}>{error}</div>}
 
       <h3>Your Ads</h3>
