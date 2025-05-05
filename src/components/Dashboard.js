@@ -8,9 +8,8 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
   const currentUser = getCurrentUser();
   const performerId = getPerformerId();
   const isDeveloper = currentUser === 'developer@example.com';
-  
-  // Add this to recognize returning users
   const isReturningUser = localStorage.getItem('hasVisitedBefore') === 'true';
+
 
   useEffect(() => {
     // Mark user as having visited
@@ -22,7 +21,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
   const fetchAds = async () => {
     try {
       setLoading(true);
-      const userAds = await getAds(); // This now returns only user's ads
+      const userAds = await getAds();
       setAds(userAds);
     } catch (err) {
       setError('Failed to load ads');
@@ -123,7 +122,13 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
                 marginBottom: '15px'
               }}
             >
-              <h3>{ad.name}</h3>
+              <h3 style={{ 
+                color: '#3f51b5', 
+                fontSize: '20px',
+                borderBottom: '2px solid #eee',
+                paddingBottom: '8px',
+                marginBottom: '12px'
+              }}>{ad.name}</h3>
               <p><strong>Video URL:</strong> {ad.adDetails.videoUrl}</p>
               <p><strong>Target URL:</strong> {ad.adDetails.targetUrl}</p>
               <p><strong>Budget:</strong> {ad.adDetails.budget}</p>
