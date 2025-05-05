@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAds, deleteAd, getCurrentUser, getPerformerId } from '../api';
 
-const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd }) => {
+const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -56,48 +56,12 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd }) => {
           Welcome back! Good to see you again.
         </div>
       )}
-      
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2>Dashboard</h2>
-        <div>
-          <button
-            onClick={onNewAd}
-            style={{
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              padding: '10px 15px',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              marginRight: '10px'
-            }}
-          >
-            New Ad
-          </button>
-          
-          <button
-            onClick={onLogout}
-            style={{
-              backgroundColor: '#f44336',
-              color: 'white',
-              padding: '10px 15px',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-      
-      {error && <div style={{ color: 'red', marginBottom: '15px' }}>{error}</div>}
-      
+                
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
       <h2>Dashboard</h2>
       <div>
         <button
-          onClick={() => onViewAllStats()} // Add this new prop for the Dashboard component
+          onClick={onViewAllStats}
           style={{
             backgroundColor: '#FF9800',
             color: 'white',
@@ -142,6 +106,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd }) => {
       </div>
     </div>
 
+    {error && <div style={{ color: 'red', marginBottom: '15px' }}>{error}</div>}
 
       <h3>Your Ads</h3>
       {ads.length === 0 ? (
