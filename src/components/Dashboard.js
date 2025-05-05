@@ -21,7 +21,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
   const fetchAds = async () => {
     try {
       setLoading(true);
-      const userAds = await getAds();
+      const userAds = await getAds(isDeveloper);
       setAds(userAds);
     } catch (err) {
       setError('Failed to load ads');
