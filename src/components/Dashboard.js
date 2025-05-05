@@ -128,7 +128,8 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
                 borderBottom: '2px solid #eee',
                 paddingBottom: '8px',
                 marginBottom: '12px'
-              }}>{ad.name}</h3>
+              }}>{ad.adName || ad.name}</h3>
+              
               <p><strong>Video URL:</strong> {ad.adDetails.videoUrl}</p>
               <p><strong>Target URL:</strong> {ad.adDetails.targetUrl}</p>
               <p><strong>Budget:</strong> {ad.adDetails.budget}</p>
