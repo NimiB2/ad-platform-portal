@@ -146,3 +146,28 @@ export const getAllPerformers = async () => {
     throw error;
   }
 };
+
+// Get all performers Statistics
+export const getAllPerformersStats = async () => {
+  try {
+    const performers = await getAllPerformers();
+    const statsPromises = performers.map(performer => 
+      axios.get(`/api/performers/${performer._id}/stats`)
+        .then(response => ({
+          performerId: performer._id,
+          performerName: performer.name,
+          performerEmail: performer.email,
+          stats: response.data
+        }))
+        .catch(() => ({
+          performerId: performer._id,
+          performerName: performer.name,
+          performerEmail: performer.email,
+          stats: { adsStats: [] }
+        }))
+    );
+    return Promise.all(statsPromises);
+  } catch (error) {
+    throw error;
+  }
+};
