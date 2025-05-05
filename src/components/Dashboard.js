@@ -21,6 +21,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
   const fetchAds = async () => {
     try {
       setLoading(true);
+      // Pass true to getAds when user is developer to get all ads
       const userAds = await getAds(isDeveloper);
       setAds(userAds);
     } catch (err) {
@@ -120,81 +121,178 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
 
     {error && <div style={{ color: 'red', marginBottom: '15px' }}>{error}</div>}
 
-      <h3>Your Ads</h3>
-      {ads.length === 0 ? (
-        <p>No ads found. Create your first ad!</p>
-      ) : (
-        <div>
-          {ads.map(ad => (
-            <div
-              key={ad._id}
-              style={{
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                padding: '15px',
-                marginBottom: '15px'
-              }}
-            >
-              <h3 style={{ 
-                color: '#3f51b5', 
-                fontSize: '20px',
-                borderBottom: '2px solid #eee',
-                paddingBottom: '8px',
-                marginBottom: '12px'
-              }}>{ad.adName || ad.name}</h3>
-              
-              <p><strong>Video URL:</strong> {ad.adDetails.videoUrl}</p>
-              <p><strong>Target URL:</strong> {ad.adDetails.targetUrl}</p>
-              <p><strong>Budget:</strong> {ad.adDetails.budget}</p>
-              
-              <div style={{ marginTop: '15px' }}>
-                <button
-                  onClick={() => onEditAd(ad)}
-                  style={{
-                    backgroundColor: '#2196F3',
-                    color: 'white',
-                    padding: '8px 12px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    marginRight: '10px'
-                  }}
-                >
-                  Edit
-                </button>
+      <h3>{isDeveloper ? "All Ads" : "Your Ads"}</h3>
+      
+      {isDeveloper ? (
+        // Group ads by performer
+        Object.entries(
+          ads.reduce((groups, ad) => {
+            const performerName = ad.performerName || 'Unknown';
+            if (!groups[performerName]) {
+              groups[performerName] = [];
+            }
+            groups[performerName].push(ad);
+            return groups;
+          }, {})
+        ).map(([performerName, performerAds]) => (
+          <div key={performerName}>
+            <h4 style={{ 
+              backgroundColor: '#f8f9fa', 
+              padding: '10px', 
+              borderRadius: '4px',
+              marginTop: '20px',
+              marginBottom: '10px'
+            }}>
+              {performerName}'s Ads
+            </h4>
+            {performerAds.map(ad => (
+              <div
+                key={ad._id}
+                style={{
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  padding: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <h3 style={{ 
+                  color: '#3f51b5', 
+                  fontSize: '20px',
+                  borderBottom: '2px solid #eee',
+                  paddingBottom: '8px',
+                  marginBottom: '12px'
+                }}>{ad.adName || ad.name}</h3>
                 
-                <button
-                  onClick={() => onViewStats(ad._id)}
-                  style={{
-                    backgroundColor: '#FF9800',
-                    color: 'white',
-                    padding: '8px 12px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    marginRight: '10px'
-                  }}
-                >
-                  View Stats
-                </button>
+                <p><strong>Video URL:</strong> {ad.adDetails.videoUrl}</p>
+                <p><strong>Target URL:</strong> {ad.adDetails.targetUrl}</p>
+                <p><strong>Budget:</strong> {ad.adDetails.budget}</p>
                 
-                <button
-                  onClick={() => handleDelete(ad._id)}
-                  style={{
-                    backgroundColor: '#f44336',
-                    color: 'white',
-                    padding: '8px 12px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Delete
-                </button>
+                <div style={{ marginTop: '15px' }}>
+                  <button
+                    onClick={() => onEditAd(ad)}
+                    style={{
+                      backgroundColor: '#2196F3',
+                      color: 'white',
+                      padding: '8px 12px',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      marginRight: '10px'
+                    }}
+                  >
+                    Edit
+                  </button>
+                  
+                  <button
+                    onClick={() => onViewStats(ad._id)}
+                    style={{
+                      backgroundColor: '#FF9800',
+                      color: 'white',
+                      padding: '8px 12px',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      marginRight: '10px'
+                    }}
+                  >
+                    View Stats
+                  </button>
+                  
+                  <button
+                    onClick={() => handleDelete(ad._id)}
+                    style={{
+                      backgroundColor: '#f44336',
+                      color: 'white',
+                      padding: '8px 12px',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ))
+      ) : (
+        // Original code for regular users
+        ads.length === 0 ? (
+          <p>No ads found. Create your first ad!</p>
+        ) : (
+          <div>
+            {ads.map(ad => (
+              <div
+                key={ad._id}
+                style={{
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  padding: '15px',
+                  marginBottom: '15px'
+                }}
+              >
+                <h3 style={{ 
+                  color: '#3f51b5', 
+                  fontSize: '20px',
+                  borderBottom: '2px solid #eee',
+                  paddingBottom: '8px',
+                  marginBottom: '12px'
+                }}>{ad.adName || ad.name}</h3>
+                
+                <p><strong>Video URL:</strong> {ad.adDetails.videoUrl}</p>
+                <p><strong>Target URL:</strong> {ad.adDetails.targetUrl}</p>
+                <p><strong>Budget:</strong> {ad.adDetails.budget}</p>
+                
+                <div style={{ marginTop: '15px' }}>
+                  <button
+                    onClick={() => onEditAd(ad)}
+                    style={{
+                      backgroundColor: '#2196F3',
+                      color: 'white',
+                      padding: '8px 12px',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      marginRight: '10px'
+                    }}
+                  >
+                    Edit
+                  </button>
+                  
+                  <button
+                    onClick={() => onViewStats(ad._id)}
+                    style={{
+                      backgroundColor: '#FF9800',
+                      color: 'white',
+                      padding: '8px 12px',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      marginRight: '10px'
+                    }}
+                  >
+                    View Stats
+                  </button>
+                  
+                  <button
+                    onClick={() => handleDelete(ad._id)}
+                    style={{
+                      backgroundColor: '#f44336',
+                      color: 'white',
+                      padding: '8px 12px',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
       )}
     </div>
   );
