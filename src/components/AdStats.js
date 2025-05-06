@@ -202,11 +202,7 @@ const AdStats = ({ adId, onBack }) => {
 
               dataLabels: {
                 enabled: true,
-                useHTML: true,
-                formatter: (val) => {
-                  const color = val === 0 ? '#9e9e9e' : '#000000';
-                  return `<span style="color:${color}">${val}</span>`;
-                },
+                formatter: (val) => (val === 0 ? '' : val),
                 style: { fontWeight: '700' }
               }
             }}
