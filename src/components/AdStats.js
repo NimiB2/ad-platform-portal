@@ -85,18 +85,34 @@ const AdStats = ({ adId, onBack }) => {
       setRangeError('Please choose a valid date range');
       return;
     }
+  
+    // build list of YYYY‑MM‑DD strings between the two dates (inclusive)
+    const days = [];
+    let d = new Date(fromDate);
+    const end = new Date(toDate);
+    while (d <= end) {
+      days.push(d.toISOString().slice(0, 10));
+      d.setDate(d.getDate() + 1);
+    }
+  
     try {
-      const res = await axios.get(`/api/ads/${adId}/stats`, {
-        params: { from: fromDate, to: toDate },
-      });
-      setDailyData(res.data.daily);
+      const requests = days.map(date =>
+        axios.get(`/api/ads/${adId}/stats`, { params: { from: date, to: date } })
+          .then(res => ({
+            date,
+            views:  res.data.adStats.views,
+            clicks: res.data.adStats.clicks,
+            skips:  res.data.adStats.skips
+          }))
+      );
+      const daily = await Promise.all(requests);
+      setDailyData(daily);
       setRangeError(null);
     } catch {
       setRangeError('Error fetching data');
     }
   };
   
-
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <div style={{ marginBottom: '20px' }}>
@@ -116,6 +132,31 @@ const AdStats = ({ adId, onBack }) => {
       </div>
 
       <h2>Statistics for "{ad.name}"</h2>
+
+      <div style={{ marginTop: '15px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
+        <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
+        <button onClick={handleApplyRange}>Show</button>
+        {rangeError && <span style={{ color: 'red' }}>{rangeError}</span>}
+      </div>
+      
+      {/* Daily trend graph */}
+      {dailyData && (
+        <div style={{ height: '300px', marginTop: '30px' }}>
+          <h3>Daily Trend</h3>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="views" stroke="#2196F3" name="Views" />
+              <Line type="monotone" dataKey="clicks" stroke="#4CAF50" name="Clicks" />
+              <Line type="monotone" dataKey="skips" stroke="#FF9800" name="Skips" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       <div style={{ 
         display: 'grid', 
@@ -177,33 +218,6 @@ const AdStats = ({ adId, onBack }) => {
         <Bar label="Click-Through Rate (%)" value={stats.adStats.clickThroughRate} maxValue={maxRate} color="#9C27B0" />
         <Bar label="Conversion Rate (%)" value={stats.adStats.conversionRate} maxValue={maxRate} color="#E91E63" />
       </div>
-      
-      {/* Date filter */}
-      <div style={{ marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-        <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
-        <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
-        <button onClick={handleApplyRange}>Show</button>
-        {rangeError && <span style={{ color: 'red' }}>{rangeError}</span>}
-      </div>
-
-      {/* Daily trend graph */}
-      {dailyData && (
-        <div style={{ height: '300px', marginTop: '30px' }}>
-          <h3>Daily Trend</h3>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="views" stroke="#2196F3" name="Views" />
-              <Line type="monotone" dataKey="clicks" stroke="#4CAF50" name="Clicks" />
-              <Line type="monotone" dataKey="skips" stroke="#FF9800" name="Skips" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      )}
-
     </div>
   );
 };
