@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAdStats, getAdById } from '../api';
 import axios from 'axios';
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
-
-
+import Chart from 'react-apexcharts';
 
 // Simple bar component for charts
 const Bar = ({ label, value, maxValue, color }) => (
@@ -42,8 +31,41 @@ const AdStats = ({ adId, onBack }) => {
   const [toDate, setToDate] = useState('');
   const [dailyData, setDailyData] = useState(null);
   const [rangeError, setRangeError] = useState(null);
-  const [showGraph, setShowGraph] = useState(false);
-
+  
+  const handleToggleGraph = async () => {
+    if (dailyData) {
+      setDailyData(null);       // hide
+      return;
+    }
+    if (!fromDate || !toDate) {
+      setRangeError('Please choose a valid date range');
+      return;
+    }
+    try {
+      const requests = [];
+      let d = new Date(fromDate);
+      const end = new Date(toDate);
+      while (d <= end) {
+        const dateStr = d.toISOString().slice(0, 10);
+        requests.push(
+          axios.get(`/api/ads/${adId}/stats`, { params: { from: dateStr, to: dateStr } })
+            .then(res => ({
+              date: dateStr,
+              views:  res.data.adStats.views,
+              clicks: res.data.adStats.clicks,
+              skips:  res.data.adStats.skips,
+            }))
+        );
+        d.setDate(d.getDate() + 1);
+      }
+      const daily = await Promise.all(requests);
+      setDailyData(daily);
+      setRangeError(null);
+    } catch {
+      setRangeError('Error fetching data');
+    }
+  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -139,52 +161,36 @@ const AdStats = ({ adId, onBack }) => {
       <div style={{ marginTop: '15px', display: 'flex', gap: '10px', alignItems: 'center' }}>
         <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
         <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
-        <button onClick={handleApplyRange}>Show</button>
-        <button onClick={() => setShowGraph(prev => !prev)}>
-          {showGraph ? 'Hide graph' : 'Show graph'}
+        <button onClick={handleToggleGraph}>
+          {dailyData ? 'Hide graph' : 'Show graph'}
         </button>
         {rangeError && <span style={{ color: 'red' }}>{rangeError}</span>}
       </div>
 
-      {/* Daily trend graph */}
-      {dailyData && showGraph && (
-      <div style={{ height: '300px', marginTop: '30px' }}>
-        <h3>Daily Trend</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={dailyData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Area
-              type="monotone"
-              dataKey="views"
-              stroke="#2196F3"
-              fill="#2196F3"
-              fillOpacity={0.2}
-              name="Views"
-            />
-            <Area
-              type="monotone"
-              dataKey="clicks"
-              stroke="#4CAF50"
-              fill="#4CAF50"
-              fillOpacity={0.2}
-              name="Clicks"
-            />
-            <Area
-              type="monotone"
-              dataKey="skips"
-              stroke="#FF9800"
-              fill="#FF9800"
-              fillOpacity={0.2}
-              name="Skips"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
-    )}
+      {dailyData && (
+        <div style={{ height: '320px', marginTop: '30px' }}>
+          <h3>Daily Trend</h3>
+          <Chart
+            type="area"
+            height={300}
+            series={[
+              { name: 'Views',  data: dailyData.map(d => [d.date, d.views])  },
+              { name: 'Clicks', data: dailyData.map(d => [d.date, d.clicks]) },
+              { name: 'Skips',  data: dailyData.map(d => [d.date, d.skips])  },
+            ]}
+            options={{
+              colors: ['#2196F3', '#4CAF50', '#FF9800'],
+              stroke: { curve: 'smooth', width: 2 },
+              fill:   { opacity: 0.25 },
+              xaxis:  { type: 'datetime' },
+              tooltip:{ x: { format: 'yyyy-MM-dd' } },
+              legend: { position: 'top' },
+              grid:   { strokeDashArray: 3 },
+            }}
+          />
+        </div>
+      )}
+
 
 
       <div style={{ 
