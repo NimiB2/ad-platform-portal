@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { getAdStats, getAdById } from '../api';
+import axios from 'axios';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
+
 
 // Simple bar component for charts
 const Bar = ({ label, value, maxValue, color }) => (
@@ -25,6 +36,11 @@ const AdStats = ({ adId, onBack }) => {
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [dailyData, setDailyData] = useState(null);
+  const [rangeError, setRangeError] = useState(null);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +67,6 @@ const AdStats = ({ adId, onBack }) => {
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
   if (!stats || !ad) return <div>No statistics available</div>;
 
-  // Find the maximum value for scaling the bars
   const eventCounts = [
     stats.adStats.views,
     stats.adStats.clicks,
@@ -64,6 +79,23 @@ const AdStats = ({ adId, onBack }) => {
     stats.adStats.conversionRate
   ];
   const maxRate = Math.max(...rateValues);
+
+  const handleApplyRange = async () => {
+    if (!fromDate || !toDate) {
+      setRangeError('Please choose a valid date range');
+      return;
+    }
+    try {
+      const res = await axios.get(`/api/ads/${adId}/stats`, {
+        params: { from: fromDate, to: toDate },
+      });
+      setDailyData(res.data.daily);
+      setRangeError(null);
+    } catch {
+      setRangeError('Error fetching data');
+    }
+  };
+  
 
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
@@ -145,6 +177,33 @@ const AdStats = ({ adId, onBack }) => {
         <Bar label="Click-Through Rate (%)" value={stats.adStats.clickThroughRate} maxValue={maxRate} color="#9C27B0" />
         <Bar label="Conversion Rate (%)" value={stats.adStats.conversionRate} maxValue={maxRate} color="#E91E63" />
       </div>
+      
+      {/* Date filter */}
+      <div style={{ marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
+        <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
+        <button onClick={handleApplyRange}>Show</button>
+        {rangeError && <span style={{ color: 'red' }}>{rangeError}</span>}
+      </div>
+
+      {/* Daily trend graph */}
+      {dailyData && (
+        <div style={{ height: '300px', marginTop: '30px' }}>
+          <h3>Daily Trend</h3>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="views" stroke="#2196F3" name="Views" />
+              <Line type="monotone" dataKey="clicks" stroke="#4CAF50" name="Clicks" />
+              <Line type="monotone" dataKey="skips" stroke="#FF9800" name="Skips" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
     </div>
   );
 };
