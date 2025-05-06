@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { getPerformerStats, getAllPerformers, getCurrentUser } from '../api';
 import axios from 'axios';
+import Chart from 'react-apexcharts';
 
 // Bar component for charts
 const Bar = ({ label, value, maxValue, color }) => (
@@ -28,7 +29,45 @@ const AllAdStats = ({ onBack }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const isDeveloper = getCurrentUser() === 'developer@example.com';
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [dailyData, setDailyData] = useState(null);
+  const [rangeError, setRangeError] = useState(null);
 
+  const handleToggleGraph = async () => {
+    if (dailyData) {
+      setDailyData(null);
+      return;
+    }
+    if (!fromDate || !toDate) {
+      setRangeError('Please choose a valid date range');
+      return;
+    }
+    try {
+      const days = [];
+      let d = new Date(fromDate);
+      const end = new Date(toDate);
+      while (d <= end) {
+        days.push(d.toISOString().slice(0, 10));
+        d.setDate(d.getDate() + 1);
+      }
+      const reqs = days.map(date =>
+        axios.get('/api/ads/stats', { params: { from: date, to: date } })
+          .then(res => ({
+            date,
+            views:  res.data.views,
+            clicks: res.data.clicks,
+            skips:  res.data.skips,
+          }))
+      );
+      const daily = await Promise.all(reqs);
+      setDailyData(daily);
+      setRangeError(null);
+    } catch {
+      setRangeError('Error fetching data');
+    }
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -115,6 +154,58 @@ const AllAdStats = ({ onBack }) => {
         </div>
 
         <h2>Statistics for All Your Ads</h2>
+
+        <div style={{ marginTop: '15px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
+        <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
+        <button
+          onClick={handleToggleGraph}
+          style={{
+            backgroundColor: dailyData ? '#f44336' : '#2196F3',
+            color: 'white',
+            padding: '8px 16px',
+            border: 'none',
+            borderRadius: '4px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+          }}
+        >
+          {dailyData ? 'Hide graph' : 'Show graph'}
+        </button>
+        {rangeError && <span style={{ color: 'red' }}>{rangeError}</span>}
+      </div>
+
+
+      {dailyData && (
+        <div style={{ height: '320px', marginTop: '30px', marginBottom: '40px' }}>
+          <h3>Daily Trend (All Ads)</h3>
+          <Chart
+            type="area"
+            height={300}
+            series={[
+              { name: 'Views',  data: dailyData.map(d => [d.date, d.views])  },
+              { name: 'Clicks', data: dailyData.map(d => [d.date, d.clicks]) },
+              { name: 'Skips',  data: dailyData.map(d => [d.date, d.skips])  },
+            ]}
+            options={{
+              colors: ['#2196F3', '#4CAF50', '#FF9800'],
+              stroke: { curve: 'smooth', width: 0 },
+              markers:{ size: 4, strokeWidth: 0 },
+              fill:   { opacity: 0.25 },
+              xaxis:  { type: 'datetime' },
+              tooltip:{ x: { format: 'yyyy-MM-dd' } },
+              legend: { position: 'top' },
+              grid:   { strokeDashArray: 3, borderColor: '#9e9e9e' },
+              dataLabels: {
+                enabled: true,
+                formatter: val => (val === 0 ? '' : val),
+                style: { fontWeight: '700' }
+              }
+            }}
+          />
+        </div>
+      )}
 
         <div style={{ 
           display: 'grid', 
