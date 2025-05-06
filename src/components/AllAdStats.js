@@ -35,38 +35,34 @@ const AllAdStats = ({ onBack }) => {
   const [rangeError, setRangeError] = useState(null);
 
   const handleToggleGraph = async () => {
-    if (dailyData) {
-      setDailyData(null);
-      return;
-    }
-    if (!fromDate || !toDate) {
-      setRangeError('Please choose a valid date range');
-      return;
-    }
+    if (dailyData) { setDailyData(null); return; }
+    if (!fromDate || !toDate) { setRangeError('Please choose a valid date range'); return; }
+  
     try {
-      const days = [];
-      let d = new Date(fromDate);
-      const end = new Date(toDate);
-      while (d <= end) {
-        days.push(d.toISOString().slice(0, 10));
-        d.setDate(d.getDate() + 1);
-      }
-      const reqs = days.map(date =>
-        axios.get('/api/ads/stats', { params: { from: date, to: date } })
-          .then(res => ({
-            date,
-            views:  res.data.views,
-            clicks: res.data.clicks,
-            skips:  res.data.skips,
-          }))
-      );
-      const daily = await Promise.all(reqs);
-      setDailyData(daily);
+      const ads = isDeveloper ? [] : stats.adsStats;   
+      const counts = {};
+      ads.forEach(ad => {
+        ad.daily.forEach(day => {        
+          if (day.date >= fromDate && day.date <= toDate) {
+            if (!counts[day.date]) counts[day.date] = { views:0, clicks:0, skips:0 };
+            counts[day.date].views  += day.views;
+            counts[day.date].clicks += day.clicks;
+            counts[day.date].skips  += day.skips;
+          }
+        });
+      });
+  
+      const dailyArr = Object.keys(counts).sort().map(date => ({
+        date,
+        ...counts[date]
+      }));
+      setDailyData(dailyArr);
       setRangeError(null);
     } catch {
-      setRangeError('Error fetching data');
+      setRangeError('Error building data');
     }
   };
+  
   
   useEffect(() => {
     const fetchData = async () => {
