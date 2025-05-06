@@ -161,14 +161,27 @@ const AdStats = ({ adId, onBack }) => {
       <div style={{ marginTop: '15px', display: 'flex', gap: '10px', alignItems: 'center' }}>
         <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
         <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
-        <button onClick={handleToggleGraph}>
+        <button
+          onClick={handleToggleGraph}
+          style={{
+            backgroundColor: dailyData ? '#f44336' : '#2196F3',
+            color: 'white',
+            padding: '8px 16px',
+            border: 'none',
+            borderRadius: '4px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+          }}
+        >
           {dailyData ? 'Hide graph' : 'Show graph'}
         </button>
+
         {rangeError && <span style={{ color: 'red' }}>{rangeError}</span>}
       </div>
 
       {dailyData && (
-        <div style={{ height: '320px', marginTop: '30px' }}>
+        <div style={{ height: '320px', marginTop: '30px' , marginBottom: '40px'}}>
           <h3>Daily Trend</h3>
           <Chart
             type="area"
