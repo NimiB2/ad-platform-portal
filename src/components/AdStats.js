@@ -193,12 +193,13 @@ const AdStats = ({ adId, onBack }) => {
             ]}
             options={{
               colors: ['#2196F3', '#4CAF50', '#FF9800'],
-              stroke: { curve: 'smooth', width: 2 },
+              stroke: { curve: 'smooth', width: 0 },
+              markers: {size: 4, strokeWidth:0},
               fill:   { opacity: 0.25 },
               xaxis:  { type: 'datetime' },
               tooltip:{ x: { format: 'yyyy-MM-dd' } },
               legend: { position: 'top' },
-              grid:   { strokeDashArray: 3 },
+              grid:   { strokeDashArray: 3, borderColor: '#9e9e9e' },
 
               dataLabels: {
                 enabled: true,
