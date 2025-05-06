@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { getAdStats, getAdById } from '../api';
 import axios from 'axios';
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
 } from 'recharts';
+
 
 
 // Simple bar component for charts
@@ -40,7 +42,8 @@ const AdStats = ({ adId, onBack }) => {
   const [toDate, setToDate] = useState('');
   const [dailyData, setDailyData] = useState(null);
   const [rangeError, setRangeError] = useState(null);
-  
+  const [showGraph, setShowGraph] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,26 +140,52 @@ const AdStats = ({ adId, onBack }) => {
         <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
         <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
         <button onClick={handleApplyRange}>Show</button>
+        <button onClick={() => setShowGraph(prev => !prev)}>
+          {showGraph ? 'Hide graph' : 'Show graph'}
+        </button>
         {rangeError && <span style={{ color: 'red' }}>{rangeError}</span>}
       </div>
-      
+
       {/* Daily trend graph */}
-      {dailyData && (
-        <div style={{ height: '300px', marginTop: '30px' }}>
-          <h3>Daily Trend</h3>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="views" stroke="#2196F3" name="Views" />
-              <Line type="monotone" dataKey="clicks" stroke="#4CAF50" name="Clicks" />
-              <Line type="monotone" dataKey="skips" stroke="#FF9800" name="Skips" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      )}
+      {dailyData && showGraph && (
+      <div style={{ height: '300px', marginTop: '30px' }}>
+        <h3>Daily Trend</h3>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={dailyData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Area
+              type="monotone"
+              dataKey="views"
+              stroke="#2196F3"
+              fill="#2196F3"
+              fillOpacity={0.2}
+              name="Views"
+            />
+            <Area
+              type="monotone"
+              dataKey="clicks"
+              stroke="#4CAF50"
+              fill="#4CAF50"
+              fillOpacity={0.2}
+              name="Clicks"
+            />
+            <Area
+              type="monotone"
+              dataKey="skips"
+              stroke="#FF9800"
+              fill="#FF9800"
+              fillOpacity={0.2}
+              name="Skips"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    )}
+
 
       <div style={{ 
         display: 'grid', 
