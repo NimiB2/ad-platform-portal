@@ -199,7 +199,18 @@ const AdStats = ({ adId, onBack }) => {
               tooltip:{ x: { format: 'yyyy-MM-dd' } },
               legend: { position: 'top' },
               grid:   { strokeDashArray: 3 },
+
+              dataLabels: {
+                enabled: true,
+                useHTML: true,
+                formatter: (val) => {
+                  const color = val === 0 ? '#9e9e9e' : '#000000';
+                  return `<span style="color:${color}">${val}</span>`;
+                },
+                style: { fontWeight: '700' }
+              }
             }}
+
           />
         </div>
       )}
