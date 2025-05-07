@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPerformerStats, getAllPerformers, getCurrentUser } from '../api';
+import { getPerformerStats, getAllPerformers, isDeveloper } from '../api';
 import axios from 'axios';
 import Chart from 'react-apexcharts';
 
@@ -27,7 +27,8 @@ const AllAdStats = ({ onBack }) => {
   const [allPerformerStats, setAllPerformerStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const isDeveloper = getCurrentUser() === 'developer@example.com';
+  // Use the isDeveloper function from api.js instead of checking specific email
+  const isDevUser = isDeveloper();
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [dailyData, setDailyData] = useState(null);
@@ -54,7 +55,7 @@ const AllAdStats = ({ onBack }) => {
       while (d <= end) {
         const dateStr = d.toISOString().slice(0, 10);
         
-        if (!isDeveloper) {
+        if (!isDevUser) {
           // For regular user - fetch daily stats for each of their ads and then aggregate
           const adRequests = stats.adsStats.map(adStat => 
             axios.get(`/api/ads/${adStat.adId}/stats`, { params: { from: dateStr, to: dateStr } })
@@ -148,7 +149,7 @@ const AllAdStats = ({ onBack }) => {
       try {
         setLoading(true);
         
-        if (isDeveloper) {
+        if (isDevUser) {
           // Fetch all performers first
           const performers = await getAllPerformers();
           
@@ -184,13 +185,13 @@ const AllAdStats = ({ onBack }) => {
     };
 
     fetchData();
-  }, [isDeveloper]);
+  }, [isDevUser]);
 
   if (loading) return <div>Loading statistics...</div>;
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
   
   // For regular user
-  if (!isDeveloper) {
+  if (!isDevUser) {
     if (!stats) return <div>No statistics available</div>;
 
     // Calculate totals across all ads
