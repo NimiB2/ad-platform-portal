@@ -58,7 +58,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
       )}
                 
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-      <h2>Dashboard</h2>
+      <h2>{isDeveloper ? 'Developer Dashboard' : 'Dashboard'}</h2>
       <div>
         <button
           onClick={onViewAllStats}

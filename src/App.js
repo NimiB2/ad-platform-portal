@@ -93,11 +93,8 @@ function App() {
         )}
 
         {view === 'dashboard' && isAdmin && (
-          <>
-            <h2 style={{ padding: '0 20px', marginTop: '30px' }}>Developer Dashboard</h2>
-            <AdminView />
-          </>
-        )}    
+          <AdminView />
+        )}     
            
         {view === 'adForm' && (
           <AdForm 
