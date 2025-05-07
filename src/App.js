@@ -26,7 +26,8 @@ function App() {
     if (savedUser) {
       setUser(savedUser);
       // Check if user is a developer
-      setIsAdmin(isDeveloper());
+      const developerStatus = localStorage.getItem('isDeveloper') === 'true';
+      setIsAdmin(developerStatus);
       setView('dashboard');
     }
   }, []);
@@ -35,7 +36,8 @@ function App() {
   const handleLogin = (email) => {
     setUser(email);
     // Check if user is a developer
-    setIsAdmin(isDeveloper());
+    const developerStatus = localStorage.getItem('isDeveloper') === 'true';
+    setIsAdmin(developerStatus);
     setView('dashboard');
   };
 
@@ -96,6 +98,7 @@ function App() {
             onViewStats={handleViewStats}
             onNewAd={handleNewAd}
             onViewAllStats={handleViewAllStats}
+            isAdmin={isAdmin}  {/* Pass isAdmin prop explicitly */}
           />
         )}
 

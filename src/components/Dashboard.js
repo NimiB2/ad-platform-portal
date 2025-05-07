@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { getAds, deleteAd, getCurrentUser, getPerformerId } from '../api';
+import { getAds, deleteAd, getCurrentUser, getPerformerId, isDeveloper } from '../api';
 
-const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats }) => {
+const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats, isAdmin }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const currentUser = getCurrentUser();
   const performerId = getPerformerId();
-  const isDeveloper = currentUser === 'developer@example.com';
+  // Use the isAdmin prop passed from App.js instead of checking email
+  // const isDeveloperUser = currentUser === 'developer@example.com';
   const isReturningUser = localStorage.getItem('hasVisitedBefore') === 'true';
-
 
   useEffect(() => {
     // Mark user as having visited
@@ -22,7 +22,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
     try {
       setLoading(true);
       // Pass true to getAds when user is developer to get all ads
-      const userAds = await getAds(isDeveloper);
+      const userAds = await getAds(isAdmin);
       setAds(userAds);
     } catch (err) {
       setError('Failed to load ads');
@@ -58,7 +58,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
       )}
                 
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-      <h2>{isDeveloper ? 'Developer Dashboard' : 'Dashboard'}</h2>
+      <h2>{isAdmin ? 'Developer Dashboard' : 'Dashboard'}</h2>
       <div>
         <button
           onClick={onViewAllStats}
@@ -106,7 +106,7 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
       </div>
     </div>
 
-      {isDeveloper && (
+      {isAdmin && (
         <div style={{ 
           backgroundColor: '#ffebee', 
           padding: '10px', 
@@ -121,9 +121,9 @@ const Dashboard = ({ onLogout, onEditAd, onViewStats, onNewAd, onViewAllStats })
 
     {error && <div style={{ color: 'red', marginBottom: '15px' }}>{error}</div>}
 
-      <h3>{isDeveloper ? "All Ads" : "Your Ads"}</h3>
+      <h3>{isAdmin ? "All Ads" : "Your Ads"}</h3>
       
-      {isDeveloper ? (
+      {isAdmin ? (
         // Group ads by performer
         Object.entries(
           ads.reduce((groups, ad) => {
