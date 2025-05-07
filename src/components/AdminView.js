@@ -4,17 +4,22 @@ import { getAds, getAllPerformers } from '../api';
 const AdminView = () => {
   const [performers, setPerformers] = useState([]);
   const [ads, setAds] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [loadingPerformers, setLoadingPerformers] = useState(true);
+  const [loadingAds, setLoadingAds] = useState(true);
+  const [errorPerformers, setErrorPerformers] = useState('');
+  const [errorAds, setErrorAds] = useState('');
 
-  // Separate useEffect for fetching performers
+  // useEffect for fetching performers
   useEffect(() => {
     const fetchPerformers = async () => {
       try {
+        setLoadingPerformers(true);
         const performersData = await getAllPerformers();
         setPerformers(performersData);
       } catch (err) {
-        setError('Failed to load performers data');
+        setErrorPerformers('Failed to load performers data');
+      } finally {
+        setLoadingPerformers(false);
       }
     };
 
@@ -25,21 +30,21 @@ const AdminView = () => {
   useEffect(() => {
     const fetchAds = async () => {
       try {
-        setLoading(true);
+        setLoadingAds(true);
         const adsData = await getAds(true);
         setAds(adsData);
       } catch (err) {
-        setError('Failed to load ads data');
+        setErrorAds('Failed to load ads data');
       } finally {
-        setLoading(false);
+        setLoadingAds(false);
       }
     };
 
     fetchAds();
   }, []);
 
-  if (loading) return <div>Loading admin data...</div>;
-  if (error) return <div style={{ color: 'red' }}>{error}</div>;
+  if (loadingPerformers) return <div>Loading performers data...</div>;
+  if (errorPerformers) return <div style={{ color: 'red' }}>{errorPerformers}</div>;
 
   return (
     <div style={{ marginBottom: '30px' }}>
