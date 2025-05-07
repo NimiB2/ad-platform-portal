@@ -1,4 +1,3 @@
-```markdown
 # Ad Portal – Web Dashboard for AdSDK System
 
 ## Overview
@@ -115,4 +114,3 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 [Full license](https://opensource.org/licenses/MIT)
 
 ---
-```
