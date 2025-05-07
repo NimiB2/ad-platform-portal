@@ -7,24 +7,35 @@ const AdminView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Separate useEffect for fetching performers
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPerformers = async () => {
+      try {
+        const performersData = await getAllPerformers();
+        setPerformers(performersData);
+      } catch (err) {
+        setError('Failed to load performers data');
+      }
+    };
+
+    fetchPerformers();
+  }, []);
+
+  // useEffect for fetching ads
+  useEffect(() => {
+    const fetchAds = async () => {
       try {
         setLoading(true);
-        const [performersData, adsData] = await Promise.all([
-          getAllPerformers(),
-          getAds(true) // true → fetch all ads, not just current user's
-        ]);
-        setPerformers(performersData);
+        const adsData = await getAds(true);
         setAds(adsData);
       } catch (err) {
-        setError('Failed to load data');
+        setError('Failed to load ads data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    fetchAds();
   }, []);
 
   if (loading) return <div>Loading admin data...</div>;
@@ -44,7 +55,6 @@ const AdminView = () => {
             marginBottom: '15px'
           }}
         >
-          {/* header style matches the ad‑card UI */}
           <h3
             style={{
               color: '#3f51b5',
