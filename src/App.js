@@ -3,7 +3,7 @@ import Auth from './components/Auth';
 import Dashboard from './components/Dashboard';
 import AdForm from './components/AdForm';
 import AdStats from './components/AdStats';
-import { getCurrentUser, logoutUser } from './api';
+import { getCurrentUser, logoutUser, isDeveloper } from './api';
 import AllAdStats from './components/AllAdStats';
 import AdminView from './components/AdminView';
 
@@ -25,8 +25,8 @@ function App() {
     const savedUser = getCurrentUser();
     if (savedUser) {
       setUser(savedUser);
-      setView('dashboard');
-      setIsAdmin(savedUser === 'developer@example.com');
+      // Check if user is a developer
+      setIsAdmin(isDeveloper());
       setView('dashboard');
     }
   }, []);
@@ -34,8 +34,8 @@ function App() {
   // Handle login
   const handleLogin = (email) => {
     setUser(email);
-    // Set admin flag if the email indicates a developer
-    setIsAdmin(email === 'developer@example.com');
+    // Check if user is a developer
+    setIsAdmin(isDeveloper());
     setView('dashboard');
   };
 
@@ -43,6 +43,7 @@ function App() {
   const handleLogout = () => {
     logoutUser();
     setUser(null);
+    setIsAdmin(false);
     setView('auth');
   };
 
@@ -78,7 +79,11 @@ function App() {
         marginBottom: '20px'
       }}>
         <h1 style={{ margin: 0 }}>AdSDK Portal</h1>
-        {user && <div style={{ fontSize: '14px', color: '#6c757d', marginTop: '5px' }}>Logged in as: {user}</div>}
+        {user && (
+          <div style={{ fontSize: '14px', color: '#6c757d', marginTop: '5px' }}>
+            Logged in as: {user} {isAdmin ? '(Developer)' : ''}
+          </div>
+        )}
       </header>
 
       <main>

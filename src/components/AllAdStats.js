@@ -1,4 +1,3 @@
-// src/components/AllAdStats.js
 import React, { useState, useEffect } from 'react';
 import { getPerformerStats, getAllPerformers, getCurrentUser } from '../api';
 import axios from 'axios';

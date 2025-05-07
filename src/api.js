@@ -1,4 +1,3 @@
-// src/api.js
 import axios from 'axios';
 
 // User authentication
@@ -25,7 +24,26 @@ export const loginUser = async (email) => {
       // Store user email and ID in local storage
       localStorage.setItem('currentUser', email);
       localStorage.setItem('performerId', response.data.performerId);
+      // Ensure we clear any developer flags
+      localStorage.removeItem('isDeveloper');
+      localStorage.removeItem('developerId');
       return response.data;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const loginDeveloper = async (email) => {
+  try {
+    const response = await axios.post('/api/developers/login', { email });
+    if (response.data.exists) {
+      localStorage.setItem('currentUser', email);
+      localStorage.setItem('isDeveloper', 'true');
+      localStorage.setItem('developerId', response.data.developerId);
+      return response.data;
+    } else {
+      throw new Error('Developer not found');
     }
   } catch (error) {
     throw error;
@@ -37,6 +55,9 @@ export const registerUser = async (name, email) => {
     const response = await axios.post('/api/performers', { name, email });
     localStorage.setItem('currentUser', email);
     localStorage.setItem('performerId', response.data.performerId);
+    // Ensure we clear any developer flags
+    localStorage.removeItem('isDeveloper');
+    localStorage.removeItem('developerId');
     return response.data;
   } catch (error) {
     throw error;
@@ -46,6 +67,8 @@ export const registerUser = async (name, email) => {
 export const logoutUser = () => {
   localStorage.removeItem('currentUser');
   localStorage.removeItem('performerId');
+  localStorage.removeItem('isDeveloper');
+  localStorage.removeItem('developerId');
 };
 
 export const getCurrentUser = () => {
@@ -54,6 +77,14 @@ export const getCurrentUser = () => {
 
 export const getPerformerId = () => {
   return localStorage.getItem('performerId');
+};
+
+export const isDeveloper = () => {
+  return localStorage.getItem('isDeveloper') === 'true';
+};
+
+export const getDeveloperId = () => {
+  return localStorage.getItem('developerId');
 };
 
 // Ad management
