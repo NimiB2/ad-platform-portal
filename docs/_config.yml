@@ -1,3 +1,4 @@
+```yml
 title: Ad Portal Documentation
 description: Documentation for the AdSDK Portal web interface
 remote_theme: pmarsceill/just-the-docs
@@ -18,3 +19,4 @@ aux_links:
 # Back to top link
 back_to_top: true
 back_to_top_text: "Back to top"
+```
