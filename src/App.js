@@ -98,7 +98,7 @@ function App() {
             onViewStats={handleViewStats}
             onNewAd={handleNewAd}
             onViewAllStats={handleViewAllStats}
-            isAdmin={isAdmin}  {/* Pass isAdmin prop explicitly */}
+            isAdmin={isAdmin}  
           />
         )}
 
