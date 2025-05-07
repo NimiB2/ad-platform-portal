@@ -17,8 +17,8 @@ The Ad Portal is the web-based management interface for the AdSDK ecosystem. It 
 The Ad SDK system consists of several interconnected components that work together to deliver ads to mobile applications:
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/NimiB2/Android-SDK-Ads/main/docs/assets/architecture-diagram.jpg"
-       alt="Project Architecture Diagram" width="600"/>
+ <img src="https://raw.githubusercontent.com/NimiB2/Android-SDK-Ads/main/docs/assets/architecture-diagram.jpg"
+      alt="Project Architecture Diagram" width="600"/>
 </div>
 
 ---
