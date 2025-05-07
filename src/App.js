@@ -26,6 +26,8 @@ function App() {
     if (savedUser) {
       setUser(savedUser);
       setView('dashboard');
+      setIsAdmin(savedUser === 'developer@example.com');
+      setView('dashboard');
     }
   }, []);
 
