@@ -35,31 +35,111 @@ const AllAdStats = ({ onBack }) => {
   const [rangeError, setRangeError] = useState(null);
 
   const handleToggleGraph = async () => {
-    if (dailyData) { setDailyData(null); return; }
-    if (!fromDate || !toDate) { setRangeError('Please choose a valid date range'); return; }
-  
+    if (dailyData) {
+      setDailyData(null); // hide if already showing
+      return;
+    }
+    
+    if (!fromDate || !toDate) {
+      setRangeError('Please choose a valid date range');
+      return;
+    }
+    
     try {
-      const ads = isDeveloper ? [] : stats.adsStats;   
-      const counts = {};
-      ads.forEach(ad => {
-        ad.daily.forEach(day => {        
-          if (day.date >= fromDate && day.date <= toDate) {
-            if (!counts[day.date]) counts[day.date] = { views:0, clicks:0, skips:0 };
-            counts[day.date].views  += day.views;
-            counts[day.date].clicks += day.clicks;
-            counts[day.date].skips  += day.skips;
-          }
-        });
-      });
-  
-      const dailyArr = Object.keys(counts).sort().map(date => ({
-        date,
-        ...counts[date]
-      }));
-      setDailyData(dailyArr);
+      setLoading(true);
+      const requests = [];
+      let d = new Date(fromDate);
+      const end = new Date(toDate);
+      
+      // Create a request for each day in the range
+      while (d <= end) {
+        const dateStr = d.toISOString().slice(0, 10);
+        
+        if (!isDeveloper) {
+          // For regular user - fetch daily stats for each of their ads and then aggregate
+          const adRequests = stats.adsStats.map(adStat => 
+            axios.get(`/api/ads/${adStat.adId}/stats`, { params: { from: dateStr, to: dateStr } })
+              .then(res => ({
+                date: dateStr,
+                views: res.data.adStats.views,
+                clicks: res.data.adStats.clicks,
+                skips: res.data.adStats.skips,
+              }))
+              .catch(() => ({
+                date: dateStr,
+                views: 0,
+                clicks: 0,
+                skips: 0
+              }))
+          );
+          
+          requests.push(Promise.all(adRequests).then(adDailyStats => {
+            // Aggregate the stats for all ads on this day
+            return {
+              date: dateStr,
+              views: adDailyStats.reduce((sum, stat) => sum + stat.views, 0),
+              clicks: adDailyStats.reduce((sum, stat) => sum + stat.clicks, 0),
+              skips: adDailyStats.reduce((sum, stat) => sum + stat.skips, 0)
+            };
+          }));
+        } else {
+          // For developer - aggregate stats across all performers for each day
+          const performerRequests = allPerformerStats.map(performer => {
+            // For each performer, fetch stats for all their ads on this day
+            const adRequests = (performer.stats.adsStats || []).map(adStat => 
+              axios.get(`/api/ads/${adStat.adId}/stats`, { params: { from: dateStr, to: dateStr } })
+                .then(res => ({
+                  date: dateStr,
+                  views: res.data.adStats.views,
+                  clicks: res.data.adStats.clicks,
+                  skips: res.data.adStats.skips,
+                }))
+                .catch(() => ({
+                  date: dateStr,
+                  views: 0,
+                  clicks: 0,
+                  skips: 0
+                }))
+            );
+            
+            return Promise.all(adRequests).then(adDailyStats => {
+              // Aggregate the stats for all ads of this performer on this day
+              return {
+                performerId: performer.performerId,
+                performerName: performer.performerName,
+                date: dateStr,
+                views: adDailyStats.reduce((sum, stat) => sum + stat.views, 0),
+                clicks: adDailyStats.reduce((sum, stat) => sum + stat.clicks, 0),
+                skips: adDailyStats.reduce((sum, stat) => sum + stat.skips, 0)
+              };
+            });
+          });
+          
+          // Wait for all performer data for this day, then aggregate
+          requests.push(Promise.all(performerRequests).then(performerDailyStats => {
+            return {
+              date: dateStr,
+              views: performerDailyStats.reduce((sum, stat) => sum + stat.views, 0),
+              clicks: performerDailyStats.reduce((sum, stat) => sum + stat.clicks, 0),
+              skips: performerDailyStats.reduce((sum, stat) => sum + stat.skips, 0),
+              // Store performer breakdown for potential future use
+              performers: performerDailyStats
+            };
+          }));
+        }
+        
+        // Move to next day
+        d.setDate(d.getDate() + 1);
+      }
+      
+      const dailyResults = await Promise.all(requests);
+      setDailyData(dailyResults);
       setRangeError(null);
-    } catch {
-      setRangeError('Error building data');
+    } catch (error) {
+      console.error('Error fetching daily data:', error);
+      setRangeError('Error fetching data');
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -172,30 +252,29 @@ const AllAdStats = ({ onBack }) => {
         {rangeError && <span style={{ color: 'red' }}>{rangeError}</span>}
       </div>
 
-
       {dailyData && (
         <div style={{ height: '320px', marginTop: '30px', marginBottom: '40px' }}>
-          <h3>Daily Trend (All Ads)</h3>
+          <h3>Daily Trend</h3>
           <Chart
             type="area"
             height={300}
             series={[
-              { name: 'Views',  data: dailyData.map(d => [d.date, d.views])  },
+              { name: 'Views',  data: dailyData.map(d => [d.date, d.views]) },
               { name: 'Clicks', data: dailyData.map(d => [d.date, d.clicks]) },
-              { name: 'Skips',  data: dailyData.map(d => [d.date, d.skips])  },
+              { name: 'Skips',  data: dailyData.map(d => [d.date, d.skips]) },
             ]}
             options={{
               colors: ['#2196F3', '#4CAF50', '#FF9800'],
               stroke: { curve: 'smooth', width: 0 },
-              markers:{ size: 4, strokeWidth: 0 },
-              fill:   { opacity: 0.25 },
-              xaxis:  { type: 'datetime' },
-              tooltip:{ x: { format: 'yyyy-MM-dd' } },
+              markers: { size: 4, strokeWidth: 0 },
+              fill: { opacity: 0.25 },
+              xaxis: { type: 'datetime' },
+              tooltip: { x: { format: 'yyyy-MM-dd' } },
               legend: { position: 'top' },
-              grid:   { strokeDashArray: 3, borderColor: '#9e9e9e' },
+              grid: { strokeDashArray: 3, borderColor: '#9e9e9e' },
               dataLabels: {
                 enabled: true,
-                formatter: val => (val === 0 ? '' : val),
+                formatter: (val) => (val === 0 ? '' : val),
                 style: { fontWeight: '700' }
               }
             }}
