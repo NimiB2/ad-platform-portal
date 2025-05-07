@@ -10,7 +10,10 @@ const AdminView = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const performersData = await getAllPerformers();
+        const [performersData, adsData] = await Promise.all([
+          getAllPerformers(),
+          getAds(true) // true flag to get all ads, not just user's ads
+        ]);
         setPerformers(performersData);
       } catch (err) {
         setError('Failed to load data');
@@ -27,7 +30,7 @@ const AdminView = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Admin View</h2>
+      <h2>Developer Dashboard</h2>
       
       <div style={{ marginBottom: '30px' }}>
         <h3 style={{ 
