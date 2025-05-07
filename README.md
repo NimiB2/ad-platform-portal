@@ -1,70 +1,118 @@
-# Getting Started with Create React App
+```markdown
+# Ad Portal – Web Dashboard for AdSDK System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+**Ad Portal** is a React-based web dashboard that allows advertisers to manage ad campaigns and developers to monitor ad performance across the AdSDK ecosystem. It provides an intuitive interface for uploading ads, viewing statistics, and analyzing campaign effectiveness.
 
-## Available Scripts
+The portal serves as the management frontend for the Flask Ad Server backend and complements the Android SDK integration.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Documentation
+Full guides and reference material are available at **[Ad Portal Documentation](https://nimib2.github.io/Ad-Portal/)**.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📸 Screenshots
 
-### `npm test`
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/example-image-1.png" width="150"/><br/>
+      <sub><b>Dashboard&nbsp;View</b></sub>
+    </td>
+    <td width="25"></td>  <!-- spacer -->
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/example-image-2.png" width="150"/><br/>
+      <sub><b>Campaign&nbsp;Analytics</b></sub>
+    </td>
+    <td width="25"></td>  <!-- spacer -->
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/example-image-3.png" width="150"/><br/>
+      <sub><b>Ad&nbsp;Management</b></sub>
+    </td>
+  </tr>
+</table>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Advertiser Portal
+- Upload and manage ad campaigns with video and target URLs
+- Set budget levels and control ad display settings (skip/exit timers)
+- Track performance metrics including views, clicks, and skip rates
+- Visualize campaign effectiveness with interactive charts
+- Export data for external analysis
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Developer/Admin Tools
+- Monitor overall system performance
+- View statistics across all advertisers
+- Analyze user engagement patterns
+- Track daily trends with detailed graphs
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Integration
+The Ad Portal connects to both components of the AdSDK ecosystem:
+- **[Flask Ad Server](https://nimib2.github.io/Ad-Server/)** - RESTful backend for data storage and processing
+- **[Android SDK](https://nimib2.github.io/Android-SDK-Ads/)** - Client library displaying ads in mobile apps
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Tech Stack
+- **React** - Frontend UI library
+- **ApexCharts** - Interactive data visualization
+- **Axios** - API communication
+- **Material Design** - UI component styling
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Quick Setup
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/nimib2/Ad-Portal.git
+   cd Ad-Portal
+   ```
 
-## Learn More
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. **Set up environment variables**:
+   Create a `.env` file with:
+   ```
+   REACT_APP_API_URL=https://ad-server-kappa.vercel.app
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. **Start the development server**:
+   ```bash
+   npm start
+   ```
 
-### Code Splitting
+5. **Build for production**:
+   ```bash
+   npm run build
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+6. **Deploy to Vercel**:
+   ```bash
+   vercel
+   ```
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## License
 
-### Making a Progressive Web App
+MIT License - Copyright © 2025 Nimrod Bar
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+This study project is created for educational purposes only. Demo content is not for commercial use.
 
-### Advanced Configuration
+Permission is granted to use, copy, modify, and distribute this software subject to including the above copyright notice and permission notice in all copies.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
-### Deployment
+[Full license](https://opensource.org/licenses/MIT)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+```
