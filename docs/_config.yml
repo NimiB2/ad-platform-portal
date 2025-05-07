@@ -1,4 +1,3 @@
-```yml
 title: Ad Portal Documentation
 description: Documentation for the AdSDK Portal web interface
 remote_theme: pmarsceill/just-the-docs
@@ -9,14 +8,13 @@ search_enabled: true
 
 # Aux links for the upper right navigation
 aux_links:
-  "Ad Portal on GitHub":
-    - "https://github.com/NimiB2/Ad-Portal"
-  "Android SDK Documentation":
-    - "https://nimib2.github.io/Android-SDK-Ads/"
-  "Flask Backend Documentation":
-    - "https://nimib2.github.io/Ad-Server/"
+ "Ad Portal on GitHub":
+   - "https://github.com/NimiB2/Ad-Portal"
+ "Android SDK Documentation":
+   - "https://nimib2.github.io/Android-SDK-Ads/"
+ "Flask Backend Documentation":
+   - "https://nimib2.github.io/Ad-Server/"
 
 # Back to top link
 back_to_top: true
 back_to_top_text: "Back to top"
-```
