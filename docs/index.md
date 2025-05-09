@@ -48,5 +48,5 @@ System-wide metrics and all-advertiser analytics for developers.
 
 ## Related Documentation
 
-- [Android AdSDK Documentation](https://nimib2.github.io/Android-SDK-Ads/) - Client library for displaying ads
-- [Flask Ad Server Documentation](https://nimib2.github.io/Ad-Server/) - Backend API and data processing
+For the client-side SDK that consumes this API, see the [Android AdSDK Documentation](https://nimib2.github.io/Android-SDK-Ads/).
+For the server-side components that power this SDK, see the [Flask Ad Server Documentation](https://nimib2.github.io/Ad-Server/).
