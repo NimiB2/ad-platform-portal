@@ -20,29 +20,6 @@ Full guides and reference material are available at **[Ad Portal Documentation](
 
 ---
 
-## 📸 Screenshots
-
-<table>
-  <tr>
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/example-image-1.png" width="150"/><br/>
-      <sub><b>Dashboard&nbsp;View</b></sub>
-    </td>
-    <td width="25"></td>  <!-- spacer -->
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/example-image-2.png" width="150"/><br/>
-      <sub><b>Campaign&nbsp;Analytics</b></sub>
-    </td>
-    <td width="25"></td>  <!-- spacer -->
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/example-image-3.png" width="150"/><br/>
-      <sub><b>Ad&nbsp;Management</b></sub>
-    </td>
-  </tr>
-</table>
-
----
-
 ## Features
 
 ### Advertiser Portal
