@@ -14,9 +14,9 @@ Full guides and reference material are available at **[Ad Portal Documentation](
 
 ## 📱 AdSDK – Watch How It Works
 
-[![AdSDK Demo](https://i.imgur.com/BarqWRo.png)](https://www.kapwing.com/videos/68264cf77eecde027c279537)
-
-A short video that explains and demonstrates how the AdSDK platform works – from creating ad campaigns to analyzing user engagement.
+<a href="https://www.kapwing.com/videos/68264cf77eecde027c279537">
+  <img src="https://i.imgur.com/BarqWRo.png" alt="AdSDK Demo" width="400"/>
+</a>
 
 ---
 
