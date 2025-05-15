@@ -15,7 +15,7 @@ Full guides and reference material are available at **[Ad Portal Documentation](
 ## 📱 AdSDK – Watch How It Works
 
 <a href="https://www.kapwing.com/videos/68264cf77eecde027c279537">
-  <img src="https://i.imgur.com/BarqWRo.png" alt="AdSDK Demo" width="400"/>
+  <img src="https://i.imgur.com/BarqWRo.png" alt="AdSDK Demo" width="200"/>
 </a>
 
 ---
