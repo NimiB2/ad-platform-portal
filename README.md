@@ -37,8 +37,8 @@ Full guides and reference material are available at **[Ad Portal Documentation](
 
 ### Integration
 The Ad Portal connects to both components of the AdSDK ecosystem:
-- **[Flask Ad Server](https://nimib2.github.io/Ad-Server/)** - RESTful backend for data storage and processing
-- **[Android SDK](https://nimib2.github.io/Android-SDK-Ads/)** - Client library displaying ads in mobile apps
+- **[Flask Ad Server](https://nimib2.github.io/video-ad-server/)** - RESTful backend for data storage and processing
+- **[Android SDK](https://nimib2.github.io/video-ad-sdk-android/)** - Client library displaying ads in mobile apps
 
 ---
 
