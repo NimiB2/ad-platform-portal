@@ -119,6 +119,22 @@ The portal uses ApexCharts to create interactive visualizations:
     grid:   { strokeDashArray: 3, borderColor: '#9e9e9e' }
   }}
 />
+-```
++{% raw %}
++```javascript
++<Chart
++  type="area"
++  height={300}
++  series={[…]}
++  options={{
++    colors: ['#2196F3', '#4CAF50', '#FF9800'],
++    stroke: { curve: 'smooth', width: 0 },
++    …
++  }}
++/>
++
++```  
++{% endraw %}
 ```
 
 ## Interpreting the Data
@@ -137,5 +153,3 @@ The analytics provide insights for both advertisers and developers:
 - **Advertiser Comparison**: Relative performance of different advertisers
 - **Trend Analysis**: Usage patterns over time
 ```
-
-That completes the set of documentation files I recommended. Is there anything specific in these documents that you'd like me to further improve or adjust?
