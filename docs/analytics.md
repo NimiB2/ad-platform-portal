@@ -99,6 +99,7 @@ The system displays daily performance trends as time series charts that show:
 
 The portal uses ApexCharts to create interactive visualizations:
 
+{% raw %}
 ```javascript
 <Chart
   type="area"
@@ -111,7 +112,7 @@ The portal uses ApexCharts to create interactive visualizations:
   options={{
     colors: ['#2196F3', '#4CAF50', '#FF9800'],
     stroke: { curve: 'smooth', width: 0 },
-    markers: {size: 4, strokeWidth:0},
+    markers: { size: 4, strokeWidth: 0 },
     fill:   { opacity: 0.25 },
     xaxis:  { type: 'datetime' },
     tooltip:{ x: { format: 'yyyy-MM-dd' } },
@@ -119,23 +120,9 @@ The portal uses ApexCharts to create interactive visualizations:
     grid:   { strokeDashArray: 3, borderColor: '#9e9e9e' }
   }}
 />
--```
-+{% raw %}
-+```javascript
-+<Chart
-+  type="area"
-+  height={300}
-+  series={[…]}
-+  options={{
-+    colors: ['#2196F3', '#4CAF50', '#FF9800'],
-+    stroke: { curve: 'smooth', width: 0 },
-+    …
-+  }}
-+/>
-+
-+```  
-+{% endraw %}
 ```
+{% endraw %}
+
 
 ## Interpreting the Data
 
