@@ -8,7 +8,7 @@ The portal serves as the management frontend for the Flask Ad Server backend and
 ---
 
 ## Documentation
-Full guides and reference material are available at **[Ad Portal Documentation](https://nimib2.github.io/ad-platform-portal/)**.
+Full guides and reference material are available at **[Ad Portal Documentation](https://nimib2.github.io/video-ad-portal/)**.
 
 ---
 
