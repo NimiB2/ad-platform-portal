@@ -1,7 +1,7 @@
+remote_theme: pmarsceill/just-the-docs
+
 title: Ad Portal Documentation
 description: Documentation for the AdSDK Portal web interface
-remote_theme: pmarsceill/just-the-docs
-color_scheme: light
 
 # Enable search
 search_enabled: true
