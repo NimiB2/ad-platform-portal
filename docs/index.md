@@ -17,7 +17,7 @@ The Ad Portal is the web-based management interface for the AdSDK ecosystem. It 
 The Ad SDK system consists of several interconnected components that work together to deliver ads to mobile applications:
 
 <div align="center">
- <img src="https://raw.githubusercontent.com/NimiB2/Android-SDK-Ads/main/docs/assets/architecture-diagram.jpg"
+<img src="https://raw.githubusercontent.com/NimiB2/video-ad-sdk-android/main/docs/assets/architecture-diagram.jpg"
       alt="Project Architecture Diagram" width="600"/>
 </div>
 
@@ -48,5 +48,5 @@ System-wide metrics and all-advertiser analytics for developers.
 
 ## Related Documentation
 
-For the client-side SDK that consumes this API, see the [Android AdSDK Documentation](https://nimib2.github.io/Android-SDK-Ads/).
-For the server-side components that power this SDK, see the [Flask Ad Server Documentation](https://nimib2.github.io/Ad-Server/).
+For the client-side SDK that consumes this API, see the [Android AdSDK Documentation](https://nimib2.github.io/video-ad-sdk-android/).
+For the server-side components that power this SDK, see the [Flask Ad Server Documentation](https://nimib2.github.io/video-ad-server/).
