@@ -8,12 +8,12 @@ search_enabled: true
 
 # Aux links for the upper right navigation
 aux_links:
- "Ad Portal on GitHub":
-   - "https://github.com/NimiB2/Ad-Portal"
- "Android SDK Documentation":
-   - "https://nimib2.github.io/Android-SDK-Ads/"
- "Flask Backend Documentation":
-   - "https://nimib2.github.io/Ad-Server/"
+  "Ad Portal on GitHub":
+    - "https://github.com/NimiB2/video-ad-portal"
+  "Android SDK Documentation":
+    - "https://nimib2.github.io/video-ad-sdk-android/"
+  "Flask Backend Documentation":
+    - "https://nimib2.github.io/video-ad-server/"
 
 # Back to top link
 back_to_top: true
