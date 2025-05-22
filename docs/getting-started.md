@@ -18,8 +18,8 @@ This guide provides instructions for setting up and using the Ad Portal.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/nimib2/Ad-Portal.git
-cd Ad-Portal
+git clone https://github.com/nimib2/video-ad-portal.git
+cd video-ad-portal
 ```
 
 ### 2. Install Dependencies
