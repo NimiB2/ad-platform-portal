@@ -243,7 +243,6 @@ The Ad Portal integrates with:
 ## ✨ What's New
 
 ### Current Version
-- **React 19 Upgrade** - Latest React features and performance improvements
 - **Enhanced Charts** - ApexCharts 4.7.0 with improved interactivity
 - **Date Filtering** - Advanced analytics with custom time ranges
 - **Mobile Optimization** - Responsive design for all device sizes
