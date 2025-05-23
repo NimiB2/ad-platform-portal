@@ -1,5 +1,3 @@
-Perfect! Let's create a professional README for the Ad Portal. Based on your React project structure, here's the improved version:
-
 # Ad Portal – Campaign Management Dashboard
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
